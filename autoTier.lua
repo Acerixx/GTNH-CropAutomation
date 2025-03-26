@@ -78,14 +78,14 @@ local function checkChild(slot, crop, firstRun)
             local stat = crop.gr + crop.ga - crop.re
 
             if crop.tier > lowestTier then
-                action.transplant(gps.workingSlotToPos(slot), gps.workingSlotToPos(lowestTierSlot))
+                action.transplant(gps.workingSlotToPos(slot), gps.workingSlotToPos(lowestTierSlot), true)
                 action.placeCropStick(2)
                 database.updateFarm(lowestTierSlot, crop)
                 updateLowest()
 
             -- Not higher tier, stat up working farm
             elseif (config.statWhileTiering and crop.tier == lowestTier and stat > lowestStat) then
-                action.transplant(gps.workingSlotToPos(slot), gps.workingSlotToPos(lowestStatSlot))
+                action.transplant(gps.workingSlotToPos(slot), gps.workingSlotToPos(lowestStatSlot), true)
                 action.placeCropStick(2)
                 database.updateFarm(lowestStatSlot, crop)
                 updateLowest()
@@ -97,7 +97,7 @@ local function checkChild(slot, crop, firstRun)
 
         -- Not seen before, move to storage
         else
-            action.transplant(gps.workingSlotToPos(slot), gps.storageSlotToPos(database.nextStorageSlot()))
+            action.transplant(gps.workingSlotToPos(slot), gps.storageSlotToPos(database.nextStorageSlot()), false)
             action.placeCropStick(2)
             database.addToStorage(crop)
         end

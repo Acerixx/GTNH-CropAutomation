@@ -61,7 +61,7 @@ local function checkChild(slot, crop, firstRun)
             local stat = crop.gr + crop.ga - crop.re
 
             if stat > lowestStat then
-                action.transplant(gps.workingSlotToPos(slot), gps.workingSlotToPos(lowestStatSlot))
+                action.transplant(gps.workingSlotToPos(slot), gps.workingSlotToPos(lowestStatSlot), true)
                 action.placeCropStick(2)
                 database.updateFarm(lowestStatSlot, crop)
                 updateLowest()
@@ -72,7 +72,7 @@ local function checkChild(slot, crop, firstRun)
             end
 
         elseif config.keepMutations and (not database.existInStorage(crop)) then
-            action.transplant(gps.workingSlotToPos(slot), gps.storageSlotToPos(database.nextStorageSlot()))
+            action.transplant(gps.workingSlotToPos(slot), gps.storageSlotToPos(database.nextStorageSlot()), false)
             action.placeCropStick(2)
             database.addToStorage(crop)
 

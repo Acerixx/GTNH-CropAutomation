@@ -125,7 +125,7 @@ local function pulseDown()
 end
 
 
-local function transplant(src, dest)
+local function transplant(src, dest, upgradeStat)
     local selectedSlot = robot.select()
     gps.save()
     robot.select(robot.inventorySize() + config.binderSlot)
@@ -141,17 +141,23 @@ local function transplant(src, dest)
     robot.useDown(sides.down, true)
     gps.go(dest)
 
-    local isOccupied = true
-    while isOccupied do
-        local crop = scanner.scan()
+    if (not upgradeStat) then
+        local isOccupied = true
+        while isOccupied do
+            local crop = scanner.scan()
+            if crop.name == 'air' then
+                placeCropStick()
+                isOccupied = false
+            elseif crop.isCrop == false or crop.name ~= 'emptyCrop' then
+                database.addToStorage(crop)
+                gps.go(gps.storageSlotToPos(database.nextStorageSlot()))
+            elseif crop.isCrop == true then
+                isOccupied = false
+            end
+        end
+    else
         if crop.name == 'air' then
             placeCropStick()
-            isOccupied = false
-        elseif crop.isCrop == false or crop.name ~= 'emptyCrop' then
-            database.addToStorage(crop)
-            gps.go(gps.storageSlotToPos(database.nextStorageSlot()))
-        elseif crop.isCrop == true then
-            isOccupied = false
         end
     end
 

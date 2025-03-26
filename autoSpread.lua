@@ -38,13 +38,13 @@ local function checkChild(slot, crop)
 
             -- Make sure no parent on the working farm is empty
             if stat >= config.autoStatThreshold and findEmpty() and crop.gr <= config.workingMaxGrowth and crop.re <= config.workingMaxResistance then
-                action.transplant(gps.workingSlotToPos(slot), gps.workingSlotToPos(emptySlot))
+                action.transplant(gps.workingSlotToPos(slot), gps.workingSlotToPos(emptySlot), true)
                 action.placeCropStick(2)
                 database.updateFarm(emptySlot, crop)
 
             -- No parent is empty, put in storage
             elseif stat >= config.autoSpreadThreshold then
-                action.transplant(gps.workingSlotToPos(slot), gps.storageSlotToPos(database.nextStorageSlot()))
+                action.transplant(gps.workingSlotToPos(slot), gps.storageSlotToPos(database.nextStorageSlot()), false)
                 database.addToStorage(crop)
                 action.placeCropStick(2)
 
@@ -55,7 +55,7 @@ local function checkChild(slot, crop)
             end
 
         elseif config.keepMutations and (not database.existInStorage(crop)) then
-            action.transplant(gps.workingSlotToPos(slot), gps.storageSlotToPos(database.nextStorageSlot()))
+            action.transplant(gps.workingSlotToPos(slot), gps.storageSlotToPos(database.nextStorageSlot()), false)
             action.placeCropStick(2)
             database.addToStorage(crop)
 
