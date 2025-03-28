@@ -141,7 +141,7 @@ local function transplant(src, dest, upgradeStat)
     robot.useDown(sides.down, true)
     gps.go(dest)
 
-    if (not upgradeStat) then
+    if upgradeStat == false then
         local isOccupied = true
         while isOccupied do
             local crop = scanner.scan()
@@ -156,6 +156,7 @@ local function transplant(src, dest, upgradeStat)
             end
         end
     else
+        local crop = scanner.scan()
         if crop.name == 'air' then
             placeCropStick()
         end
